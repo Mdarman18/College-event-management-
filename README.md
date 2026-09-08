@@ -41,6 +41,17 @@ cd server
 npm install
 ```
 Create `.env` file based on `.env.example`.
+
+Required env variables:
+```
+PORT=5000
+MONGO_URI=mongodb://localhost:27017/college_event_management
+JWT_SECRET=your_jwt_secret_key
+JWT_EXPIRES_IN=7d
+```
+
+**Login uses JWT:** on `POST /api/auth/login`, the server verifies the submitted password against the stored bcrypt hash, and on success signs a JWT (using `JWT_SECRET`) with the user's id as payload. This token is returned to the client and must be sent as `Authorization: Bearer <token>` on all protected routes, where the auth middleware verifies it before passing the decoded user to the controller.
+
 ```bash
 npm run dev
 ```
@@ -51,6 +62,27 @@ cd client
 npm install
 npm run dev
 ```
+
+## Event Search & Filter
+`GET /api/events` supports search and filtering via query params:
+
+```
+GET /api/events?search=hackathon&category=technical&date=2025-03-10&page=1&limit=10
+```
+
+| Param      | Type   | Description                                              |
+|------------|--------|-----------------------------------------------------------|
+| `search`   | string | Case-insensitive match on event `title` and `description` |
+| `category` | string | Exact match on event category (e.g. technical, cultural)  |
+| `date`     | date   | Filters events on/after the given date                    |
+| `page`     | number | Pagination page number (default 1)                        |
+| `limit`    | number | Results per page (default 10)                             |
+
+Implementation notes:
+- Handled in the events service layer, not the controller, keeping query-building logic separate from request/response handling.
+- `search` uses a Mongoose `$or` with `$regex` (case-insensitive) across `title` and `description`; for larger datasets this can be swapped for a MongoDB text index (`$text`) on those fields.
+- `category` and `date` are applied as exact/range filters and combined with `$and` alongside the search condition.
+- Results are paginated using `.skip()` and `.limit()`, with the total count returned via `Model.countDocuments()` for building pagination on the client.
 
 ## MongoDB Setup
 - **Local MongoDB**: Run `mongod` and use `mongodb://localhost:27017/college_event_management` as the `MONGO_URI`.
