@@ -34,8 +34,8 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // ====---     Apply RateLimiting for security purpose -------========
-app.get("/", (res, req) => {
-  res.send("sucesss");
+app.get("/", (req, res) => {
+  res.send("success");
 });
 app.use("/api/", apiLimiter);
 app.use("/api/auth", authLimiter);
