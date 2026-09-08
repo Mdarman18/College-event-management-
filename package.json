@@ -1,0 +1,19 @@
+{
+  "name": "college-event-management",
+  "version": "1.0.0",
+  "description": "College Event Management — monorepo root",
+  "private": true,
+  "scripts": {
+    "dev:server":   "cd server && npm run dev",
+    "dev:client":   "cd client && npm run dev",
+
+    "build:server": "cd server && npm run build",
+    "build:client": "cd client && npm run build",
+    "build":        "npm run build:server",
+
+    "install:server": "cd server && npm install",
+    "install:client": "cd client && npm install",
+
+    "start": "node dist/server/server.js"
+  }
+}

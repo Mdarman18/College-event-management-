@@ -1,0 +1,28 @@
+# ── Dependencies ──────────────────────────────
+node_modules/
+server/node_modules/
+client/node_modules/
+
+# ── Build Output (NEVER commit dist/) ─────────
+dist/
+build/
+
+# ── Environment Variables ─────────────────────
+.env
+.env.local
+.env.production
+server/.env
+client/.env
+
+# ── Logs ──────────────────────────────────────
+*.log
+npm-debug.log*
+
+# ── OS / Editor ───────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ── Test Coverage ─────────────────────────────
+coverage/
